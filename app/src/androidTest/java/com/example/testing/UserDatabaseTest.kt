@@ -82,4 +82,81 @@ class UserDatabaseTest {
         assertThat(users.size).isEqualTo(2)
     }
 
+    @Test
+    fun returnTrueWhenGivenIdsOfUsersFoundInTheDatabase() = runBlocking {
+        val newUser1 = User(
+            uid = 20,
+            name = "Hamza",
+            email = "hamzaakram.shyk17@gmail.com",
+            number = "0310394",
+            isPremiumUser = true
+        )
+        val newUser2 = User(
+            uid = 21,
+            name = "Hamza",
+            email = "hamzaakram.shyk17@gmail.com",
+            number = "0310394",
+            isPremiumUser = true
+        )
+        val newUser3 = User(
+            uid = 22,
+            name = "Hamza",
+            email = "hamzaakram.shyk17@gmail.com",
+            number = "0310394",
+            isPremiumUser = true
+        )
+        userDao.insertAll(newUser1)
+        userDao.insertAll(newUser2)
+        userDao.insertAll(newUser3)
+        val usersIds = listOf(21, 20)
+        val resultedIds: List<Int> = userDao.loadAllByIds(usersIds).map { it.uid }
+        assertThat(resultedIds.containsAll(usersIds)).isTrue()
+    }
+
+
+    @Test
+    fun databaseDoesNotContainsDeletedUser() = runBlocking {
+        val newUser = User(
+            uid = 35,
+            name = "Hamza",
+            email = "hamzaakram.shyk17@gmail.com",
+            number = "0310394",
+            isPremiumUser = true
+        )
+        userDao.insertAll(newUser)
+        userDao.delete(newUser)
+        val users = userDao.getAllUsers().getOrAwaitValue()
+        assertThat(users).doesNotContain(newUser)
+    }
+
+    @Test
+    fun databaseContainsInsertedUsers() = runBlocking {
+        val newUser1 = User(
+            uid = 31,
+            name = "Hamza",
+            email = "hamzaakram.shyk17@gmail.com",
+            number = "0310394",
+            isPremiumUser = true
+        )
+        val newUser2 = User(
+            uid = 32,
+            name = "Hamza",
+            email = "hamzaakram.shyk17@gmail.com",
+            number = "0310394",
+            isPremiumUser = true
+        )
+        val newUser3 = User(
+            uid = 34,
+            name = "Hamza",
+            email = "hamzaakram.shyk17@gmail.com",
+            number = "0310394",
+            isPremiumUser = true
+        )
+        userDao.insertAll(newUser1)
+        userDao.insertAll(newUser2)
+        userDao.insertAll(newUser3)
+        val users = userDao.getAllUsers().getOrAwaitValue()
+        assertThat(users.size).isEqualTo(3)
+    }
+
 }

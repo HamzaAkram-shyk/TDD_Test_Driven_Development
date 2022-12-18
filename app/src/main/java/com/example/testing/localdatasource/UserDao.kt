@@ -15,7 +15,7 @@ interface UserDao {
     fun getAllUsers(): LiveData<List<User>>
 
     @Query("SELECT * FROM user WHERE uid IN (:userIds)")
-    suspend fun loadAllByIds(userIds: IntArray): List<User>
+    suspend fun loadAllByIds(userIds: List<Int>): List<User>
 
     @Query(
         "SELECT * FROM user WHERE name LIKE :first AND " + "number LIKE :number LIMIT 2"
