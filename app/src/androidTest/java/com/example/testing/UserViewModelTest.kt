@@ -40,7 +40,7 @@ class UserViewModelTest {
     }
 
     @Test
-    fun `Insert_New_User_Find_InThe_Room`() {
+    fun Insert_New_User_Find_InThe_Room() {
         val newUser = User(uid = 55, "Hamza", "hamzaakram@gmail.com", "0310", false)
         userViewModel.addUser(newUser)
         userViewModel.getUsers()
